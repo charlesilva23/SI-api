@@ -8,16 +8,16 @@ public class TicketCreateDTO {
 
     @NotBlank(message = "Título obrigatório")
     @Size(max = 100, message = "O Título deve ter no máximo 100 caracteres")
-    private String Title;
+    private String title;
 
     @Size(max = 2000, message = "A descrição deve conter no máximo 2000 caracteres")
-    private String Description;
+    private String description;
 
     @NotBlank(message = "Autor obrigatório")
-    private String Author;
+    private String author;
 
     @NotNull(message = "Status obrigatório")
-    private String Status;
+    private String status;
 
 
     public String getTitle() {
@@ -40,15 +40,13 @@ public class TicketCreateDTO {
         return author;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
+    public void setAuthor(String author) { this.author = author; }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 }

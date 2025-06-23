@@ -1,58 +1,113 @@
 package com.inova.siapi.modules.ticket.services;
 
 import com.inova.siapi.modules.ticket.Ticket;
+import com.inova.siapi.modules.ticket.dtos.TicketCreateDTO;
+import com.inova.siapi.modules.ticket.dtos.TicketResponseDTO;
 import com.inova.siapi.modules.ticket.entities.enums.TicketStatusEnum;
 import com.inova.siapi.modules.ticket.repositories.TicketRepository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
 public class TicketService {
 
     private final TicketRepository ticketRepository;
 
-    public TicketService(TicketRepository ticketRepository) {
-        this.ticketRepository = ticketRepository;
+    public List<TicketResponseDTO> findAll() {
+        return ticketRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 
-    public List<Ticket> findAll() {
-        return ticketRepository.findAll();
-    }
-
-    public Optional<Ticket> findById(Integer id) {
-        return ticketRepository.findById(id);
-    }
-
-    public List<Ticket> findByTitle(String title) {
-        return ticketRepository.findByTitle(title);
-    }
-
-    public List<Ticket> findByTicket(TicketStatusEnum status) {
-        return ticketRepository.findByStatus(status);
-    }
-
-    public List<Ticket> findByAuthor(String author) {
-        return ticketRepository.findByAuthor(author);
-    }
-
-    public List<Ticket> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end) {
-        return ticketRepository.findByCreatedAtBetween(start, end);
-    }
-
-    public Ticket create(Ticket ticket) {
-        return ticketRepository.save(ticket);
-    }
-
-    public Ticket update(Integer id, Ticket updatedTicket) {
+    public TicketResponseDTO findById(Integer id) {
         Ticket ticket = ticketRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ticket nao encontrado"));
+                .orElseThrow(() -> new RuntimeException("Ticket não encontrado"));
+        return toResponse(ticket);
+    }
 
-        ticket.setTitle(updatedTicket.getTitle());
-        ticket.setDescription(updatedTicket.getDescription());
-        ticket.setStatus(updatedTicket.getStatus());
-        ticket.setAuthor(updatedTicket.getAuthor());
+    public List<TicketResponseDTO> findByTitle(String title) {
+        return ticketRepository.findByTitle(title)
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
 
-        return ticketRepository.save(ticket);
+    public  List<TicketResponseDTO> findByTicket(TicketStatusEnum status) {
+        return ticketRepository.findByStatus(status)
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<TicketResponseDTO> findByAuthor(String author) {
+        return ticketRepository.findByAuthor(author)
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<TicketResponseDTO> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end) {
+        return ticketRepository.findByCreatedAtBetween(start, end)
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public TicketResponseDTO create(TicketCreateDTO dto) {
+        Ticket ticket = Ticket.builder()
+                .title(dto.getTitle())
+                .description(dto.getDescription())
+                .author(dto.getAuthor())
+                .status(TicketStatusEnum.valueOf(dto.getStatus()))
+                .build();
+        
+        ticket.setCreatedAt(LocalDateTime.now());
+        ticket.setUpdatedAt(LocalDateTime.now());
+
+                return toResponse(ticketRepository.save(ticket));
+
+    }
+
+    @Transactional
+    public TicketResponseDTO update(Integer id, TicketCreateDTO dto) {
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ticket não encontrado"));
+
+        ticket.setTitle(dto.getTitle());
+        ticket.setDescription(dto.getDescription());
+        ticket.setAuthor(dto.getAuthor());
+        ticket.setStatus(TicketStatusEnum.valueOf(dto.getStatus()));
+        ticket.setCreatedAt(LocalDateTime.now());
+
+        return toResponse(ticketRepository.save(ticket));
+    }
+
+    public void delete(Integer id) {
+        if(!ticketRepository.existsById(id)) {
+            throw new RuntimeException("Ticket nao encontrado");
+        }
+        ticketRepository.deleteById(id);
+    }
+
+    public TicketResponseDTO toResponse(Ticket ticket) {
+        return TicketResponseDTO.builder()
+                .id(ticket.getId())
+                .title(ticket.getTitle())
+                .description(ticket.getDescription())
+                .author(ticket.getAuthor())
+                .status(ticket.getStatus())
+                .createdAt(ticket.getCreatedAt())
+                .updatedAt(ticket.getUpdatedAt())
+                .build();
     }
 }
