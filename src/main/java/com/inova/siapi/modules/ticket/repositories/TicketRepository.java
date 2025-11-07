@@ -1,6 +1,6 @@
 package com.inova.siapi.modules.ticket.repositories;
 
-import com.inova.siapi.modules.ticket.Ticket;
+import com.inova.siapi.modules.ticket.entities.Ticket;
 import com.inova.siapi.modules.ticket.entities.enums.TicketStatusEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 

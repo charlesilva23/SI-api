@@ -1,6 +1,6 @@
 package com.inova.siapi.modules.ticket.services;
 
-import com.inova.siapi.modules.ticket.Ticket;
+import com.inova.siapi.modules.ticket.entities.Ticket;
 import com.inova.siapi.modules.ticket.dtos.TicketCreateDTO;
 import com.inova.siapi.modules.ticket.dtos.TicketResponseDTO;
 import com.inova.siapi.modules.ticket.entities.enums.TicketStatusEnum;

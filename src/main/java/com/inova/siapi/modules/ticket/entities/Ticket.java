@@ -1,10 +1,8 @@
-package com.inova.siapi.modules.ticket;
+package com.inova.siapi.modules.ticket.entities;
 import com.inova.siapi.common.entities.BaseEntity;
 import com.inova.siapi.modules.ticket.entities.enums.TicketStatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
