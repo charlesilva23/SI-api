@@ -21,11 +21,11 @@ public enum TicketStatusEnum implements EnumInterface {
 
     public static TicketStatusEnum fromId(Integer id) {
         for (TicketStatusEnum type : TicketStatusEnum.values()) {
-            if(type.getId().equals(id)) {
+            if (type.getId().equals(id)) {
                 return type;
             }
+        }
+        throw new IllegalArgumentException("Invalid id: " + id);
+    }
 
-        }
-         throw new IllegalArgumentException("Invalid id: " + id);
-        }
 }

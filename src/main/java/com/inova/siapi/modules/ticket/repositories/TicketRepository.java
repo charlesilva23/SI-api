@@ -19,5 +19,4 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 
     List<Ticket> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 
-
 }

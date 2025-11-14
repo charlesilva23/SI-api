@@ -68,7 +68,7 @@ public class TicketService {
                 .title(dto.getTitle())
                 .description(dto.getDescription())
                 .author(dto.getAuthor())
-                .status(TicketStatusEnum.valueOf(dto.getStatus()))
+                .status(TicketStatusEnum.fromId(dto.getStatusId()))
                 .build();
         
         ticket.setCreatedAt(LocalDateTime.now());
@@ -86,8 +86,8 @@ public class TicketService {
         ticket.setTitle(dto.getTitle());
         ticket.setDescription(dto.getDescription());
         ticket.setAuthor(dto.getAuthor());
-        ticket.setStatus(TicketStatusEnum.valueOf(dto.getStatus()));
-        ticket.setCreatedAt(LocalDateTime.now());
+        ticket.setStatus(TicketStatusEnum.fromId(dto.getStatusId()));
+        ticket.setUpdatedAt(LocalDateTime.now());
 
         return toResponse(ticketRepository.save(ticket));
     }
@@ -105,9 +105,16 @@ public class TicketService {
                 .title(ticket.getTitle())
                 .description(ticket.getDescription())
                 .author(ticket.getAuthor())
-                .status(ticket.getStatus())
+                .statusId(ticket.getStatus().getId())
                 .createdAt(ticket.getCreatedAt())
                 .updatedAt(ticket.getUpdatedAt())
                 .build();
+    }
+
+    public List<TicketResponseDTO> listAll() {
+        List<Ticket> tickets = ticketRepository.findAll();
+        return tickets.stream()
+                .map(TicketResponseDTO::new)
+                .toList();
     }
 }

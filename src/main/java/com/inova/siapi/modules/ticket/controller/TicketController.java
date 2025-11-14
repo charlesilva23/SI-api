@@ -7,12 +7,10 @@ import com.inova.siapi.modules.ticket.entities.enums.TicketStatusEnum;
 import com.inova.siapi.modules.ticket.services.TicketService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 
 @RestController
@@ -31,6 +29,12 @@ public class TicketController {
     public ResponseEntity<TicketResponseDTO> createTicket(@Valid @RequestBody TicketCreateDTO dto) {
         TicketResponseDTO created = ticketService.create(dto);
         return ResponseEntity.status(201).body(created);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<TicketResponseDTO>> listTickets() {
+        List<TicketResponseDTO> tickets = ticketService.listAll();
+        return ResponseEntity.status(200).body(tickets);
     }
 
 }

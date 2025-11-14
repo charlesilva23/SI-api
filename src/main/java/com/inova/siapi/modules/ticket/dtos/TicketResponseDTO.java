@@ -1,5 +1,6 @@
 package com.inova.siapi.modules.ticket.dtos;
 
+import com.inova.siapi.modules.ticket.entities.Ticket;
 import com.inova.siapi.modules.ticket.entities.enums.TicketStatusEnum;
 import lombok.*;
 
@@ -17,7 +18,23 @@ public class TicketResponseDTO {
     private String title;
     private String description;
     private String author;
-    private TicketStatusEnum status;
+
+    private Integer statusId;
+    private String statusName;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public TicketResponseDTO(Ticket ticket) {
+        this.id = ticket.getId();
+        this.title = ticket.getTitle();
+        this.description = ticket.getDescription();
+        this.author = ticket.getAuthor();
+
+        this.statusId = ticket.getStatus().getId();
+        this.statusName = ticket.getStatus().getName();
+
+        this.createdAt = ticket.getCreatedAt();
+        this.updatedAt = ticket.getUpdatedAt();
+    }
 }
