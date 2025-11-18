@@ -14,9 +14,10 @@ import java.util.Map;
 public class TicketStatusController {
 
     @GetMapping
-    public List<Map<String, String>> getAllStatus() {
+    public List<?> getAllStatus() {
         return Arrays.stream(TicketStatusEnum.values())
                 .map(s -> Map.of(
+                        "id", s.getId(),
                         "code", s.name(),
                         "name", s.getName()
                 ))

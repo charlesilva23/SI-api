@@ -10,7 +10,7 @@ public enum TicketStatusEnum implements EnumInterface {
     IN_PROGRESS(2, "EM PROGRESSO"),
     RESOLVED(3, "RESOLVIDO");
 
-    private final Integer id;
+    public final Integer id;
     private final String name;
 
 
