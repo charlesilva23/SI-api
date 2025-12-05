@@ -1,6 +1,7 @@
 package com.inova.siapi.modules.ticket.controller;
 
 import com.inova.siapi.modules.ticket.dtos.TicketCreateDTO;
+import com.inova.siapi.modules.ticket.dtos.TicketPatchDTO;
 import com.inova.siapi.modules.ticket.dtos.TicketResponseDTO;
 import com.inova.siapi.modules.ticket.entities.Ticket;
 import com.inova.siapi.modules.ticket.entities.enums.TicketStatusEnum;
@@ -44,12 +45,12 @@ public class TicketController {
         );
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<TicketResponseDTO> updateTicket(
             @PathVariable Integer id,
-            @Valid @RequestBody TicketCreateDTO dto
+            @RequestBody TicketPatchDTO dto
     ) {
-        TicketResponseDTO updated = ticketService.update(id, dto);
+        TicketResponseDTO updated = ticketService.updatePartial(id, dto);
         return ResponseEntity.status(201).body(updated);
     }
 

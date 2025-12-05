@@ -1,5 +1,6 @@
 package com.inova.siapi.modules.ticket.services;
 
+import com.inova.siapi.modules.ticket.dtos.TicketPatchDTO;
 import com.inova.siapi.modules.ticket.entities.Ticket;
 import com.inova.siapi.modules.ticket.dtos.TicketCreateDTO;
 import com.inova.siapi.modules.ticket.dtos.TicketResponseDTO;
@@ -116,5 +117,31 @@ public class TicketService {
         return tickets.stream()
                 .map(TicketResponseDTO::new)
                 .toList();
+    }
+
+    @Transactional
+    public TicketResponseDTO updatePartial(Integer id, TicketPatchDTO dto) {
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ticket nao encontrado"));
+
+        if(dto.getTitle() != null) {
+            ticket.setTitle(dto.getTitle());
+        }
+
+        if(dto.getDescription() != null) {
+            ticket.setDescription(dto.getDescription());
+        }
+
+        if(dto.getAuthor() != null) {
+            ticket.setAuthor(dto.getAuthor());
+        }
+
+        if(dto.getStatusId() != null) {
+            ticket.setStatus(TicketStatusEnum.fromId(dto.getStatusId()));
+        }
+
+        ticket.setUpdatedAt(LocalDateTime.now());
+
+        return toResponse(ticketRepository.save(ticket));
     }
 }
